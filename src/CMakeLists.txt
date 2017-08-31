@@ -1,3 +1,5 @@
 set (SOURCEFILES 
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/sdl_module.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/particle.cpp
     PARENT_SCOPE)
