@@ -14,16 +14,6 @@
 // dependancies
 #include "SDL2/SDL.h"
 
-djc::math::vec2f limit(djc::math::vec2f const & vec, float limit) {
-    auto length = vec.length();
-
-    if (length > limit) {
-        return djc::math::normalise(vec) * limit;
-    }
-
-    return vec;
-}
-
 int main(int argc, char *argv[]) {
     
     if (SDL_Init(SDL_INIT_EVERYTHING)) {
@@ -105,7 +95,7 @@ int main(int argc, char *argv[]) {
             p.last_position = p.current_position;
             p.acceleration += perlin_flow_field[index] * 0.01f; 
             p.velocity += p.acceleration;
-            p.velocity = limit(p.velocity, 4);
+            p.velocity = djc::math::limit(p.velocity, 4.0f);
             p.current_position += p.velocity;
             p.acceleration *= 0.0f; // reset 
         }        
