@@ -5,6 +5,7 @@
 #include <vector>
 #include <cstdint>
 #include <algorithm>
+#include <chrono>
 
 // my
 #include "djc_math/djc_math.hpp"
@@ -15,6 +16,8 @@
 #include "SDL2/SDL.h"
 
 int main(int argc, char *argv[]) {
+
+    using namespace std::chrono_literals;
     
     if (SDL_Init(SDL_INIT_EVERYTHING)) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL Could not be initialised: %s", SDL_GetError());
@@ -44,8 +47,18 @@ int main(int argc, char *argv[]) {
     double acc = 0.0;
     double zstep = 0.0;
     bool running = true;
+    auto start = std::chrono::system_clock::now();
+    int frames = 0;
 
     while (running) {
+        auto now = std::chrono::system_clock::now();
+        auto passed = std::chrono::duration_cast<std::chrono::milliseconds>(now - start);
+
+        if (passed >= 1s) {
+            std::cout << "FPS: " << frames << std::endl;
+            start = std::chrono::system_clock::now();
+            frames = 0;
+        } 
 
         // check for input events 
         while (SDL_PollEvent(&event)) {
@@ -76,7 +89,7 @@ int main(int argc, char *argv[]) {
                 }
             }
         }
-        
+
         // update all the particles
         for (particle & p : particles) {
 
@@ -190,6 +203,7 @@ int main(int argc, char *argv[]) {
         //---------------------------------------------------------------------
         zstep+= 0.005f;
         acc += .005;
+        frames++;
     }
 
     SDL_Quit();
